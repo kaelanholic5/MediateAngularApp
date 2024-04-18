@@ -1,0 +1,24 @@
+.smallHeader{
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+}
+
+.listRow{
+    width:100%; 
+    height:350px;
+    background-color:rgb(29, 223, 126);
+}
+
+.dataRow{
+    width:100%;
+    height:500px;
+    background-color: rgb(111, 255, 195);
+}
+
+.alternateRow1{
+    background-color:rgb(29, 223, 126);
+}
+
+.alternateRow2{
+    background-color: rgb(111, 255, 195);
+}

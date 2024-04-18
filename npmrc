@@ -1,0 +1,2 @@
+prefix=${APPDATA}\npm
+unsafe-perm=true

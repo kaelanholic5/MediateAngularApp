@@ -1,0 +1,162 @@
+<html>
+
+<head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+    crossorigin="anonymous">
+</head>
+
+<body>
+  <div class="listRow">
+    <div style=" width:34%;float:left;">
+      <h1>List of companies:</h1>
+      <input class="form-control" [(ngModel)]="companyText" placeholder="search text goes here">
+      <ul class="list-group" style="max-height: 250px; overflow:auto;">
+        <li class="list-group-item" (click)="setCompany(c)" *ngFor="let c of allCompanies | filterCompany : companyText">
+          {{c.companyName}}
+        </li>
+      </ul>
+    </div>
+    <div style="width:33%;float:left;">
+      <h1>List of websites:</h1>
+      <input class="form-control" [(ngModel)]="urlText" placeholder="search text goes here">
+      <ul class="list-group" style="overflow:auto; max-height: 250px;">
+        <li class="list-group-item" (click)="setWebsite(w)" *ngFor="let w of allWebsites | filterWebsite : urlText">
+          {{w.url}}
+        </li>
+      </ul>
+    </div>
+    <div style=" width:33%;float:left;">
+      <h1>List of people:</h1>
+      <input class="form-control" [(ngModel)]="personText" placeholder="search text goes here">
+      <ul class="list-group" style="overflow:auto; max-height: 250px;">
+        <li class="list-group-item" (click)="setPerson(p)" *ngFor="let p of allPeople | filterPeople : personText">
+          {{p.personName}}
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="dataRow">
+    <div style="float:left;width:25%;">
+      <h2 class="smallHeader">Company 1:</h2>
+      <br/>
+      <h3 style="color: red">{{company1?.companyName}}</h3>
+      <h3>People</h3>
+      <ul style="overflow:auto; max-height: 100px;">
+        <li *ngFor="let p of company1People">{{p}}</li>
+      </ul>
+      <h3>Holding Companies</h3>
+      <ul style="overflow:auto; max-height: 100px;">
+        <li *ngFor="let h of company1Holders">{{h?.companyName}}</li>
+      </ul>
+      <h3>Subsidiaries</h3>
+      <ul style="overflow:auto; max-height: 100px;">
+        <li *ngFor="let s of company1Subs" >{{s?.companyName}}</li>
+      </ul>
+    </div>
+    <div style="width:25%;float:left;">
+      <h2 class="smallHeader">Company 2:</h2>
+      <br/>
+      <h3 style="color: red">{{company2?.companyName}}</h3>
+      <h3>People</h3>
+      <ul style="overflow:auto; max-height: 100px;">
+        <li *ngFor="let p of company2People">{{p}}</li>
+      </ul>
+      <h3>Holding Companies</h3>
+      <ul style="overflow:auto; max-height: 100px;">
+        <li *ngFor="let h of company2Holders">{{h?.companyName}}</li>
+      </ul>
+      <h3>Subsidiaries</h3>
+      <ul style="overflow:auto; max-height: 100px;">
+        <li *ngFor="let s of company2Subs">{{s?.companyName}}</li>
+      </ul>
+    </div>
+    <div style="width:25%;float:left;">
+      <h2 class="smallHeader">Website:</h2>
+      <br/>{{website?.url}}
+      <h3>Company</h3>
+      <h3 style="color: red">{{webCompany?.companyName}}</h3>
+      <h3>Person</h3>
+      <h3 style="color: red">{{webPerson?.personName}}</h3>
+    </div>
+    <div style="width:25%;float:left;">
+      <h2 class="smallHeader">Person:</h2>
+      <br/>
+      <h3 style="color: red">{{person?.personName}}</h3>
+      <ul style="overflow:auto; max-height: 600px;">
+        <li *ngFor="let pc of personCompanies">{{pc}}</li>
+      </ul>
+    </div>
+
+  </div>
+  <div class="alternateRow2" style="width:100%;clear:both; padding-top:50px;">
+    <button (click)="saveCompanyRelationship()" type="button" class="btn btn-primary">Save {{company1?.companyName}} as Holding Company of {{company2?.companyName}}</button>
+    <button (click)="saveWebsiteCompanyData()" type="button" class="btn btn-primary">Save {{company1?.companyName}} as Main Owner of {{website?.url}}</button>
+    <button (click)="saveWebsitePersonData()" type="button" class="btn btn-primary">Save {{person?.personName}} as Main Owner of {{website?.url}}</button>
+  </div>
+
+  <div style="width:100%;clear:both; padding-top:50px;">
+    <div style="width:50%;float:left;">
+      <h1>New Person:</h1>
+      <input class="form-control" style="width:40%" [(ngModel)]="personName" placeholder="Person Name">
+      <input class="form-control" style="width:40%" [(ngModel)]="personWikipedia" placeholder="Person Wikipedia">
+      <button (click)="createNewPerson(); " type="button" class="btn btn-primary">Create New Person</button>
+    </div>
+    <div style="width:50%;float:left;">
+      <h1>New Company:</h1>
+      <input class="form-control" style="width:40%" [(ngModel)]="companyName" placeholder="Company Name">
+      <input class="form-control" style="width:40%" [(ngModel)]="companyWikipedia" placeholder="Person Wikipedia">
+      <button (click)="createNewCompany()" type="button" class="btn btn-primary">Create New Company</button>
+    </div>
+  </div>
+
+
+  <div style="width:100%;clear:both; padding-top:50px;">
+    <div style="width:50%;float:left;">
+      <h1>New Person-Company Combo:</h1>
+      choose a person and a company
+      <div>
+        <b>Company:</b>
+        <br/>{{company1?.companyName}}
+        <br/>
+        <b>Person:</b>
+        <br/>{{person?.personName}}
+      </div>
+      <input class="form-control" style="width:40%" [(ngModel)]="relationship" placeholder="Relationship">
+      <button (click)="savePersonCompanyRelationship()" type="button" class="btn btn-primary">Save Relationship of {{person?.personName}} with {{company1?.companyName}}</button>
+    </div>
+    <div style="width:50%;float:left;">
+      <h1>New Website:</h1>
+      choose a person or a company, but not both(Company 1 is used)
+      <div>
+        <b>Company:</b>
+        <br/>{{company1?.companyName}}
+        <br/>
+        <b>Person:</b>
+        <br/>{{person?.personName}}
+      </div>
+      <input class="form-control" style="width:40%" [(ngModel)]="url" placeholder="Url">
+      <button (click)="createNewWebsite();" type="button" class="btn btn-primary">Create New Website</button>
+    </div>
+  </div>
+  <div style="width:100%;clear:both; padding-top:50px;">
+    <div style="width:50%;float:left;">
+      <h1>New Partial Owner:</h1>
+      choose two companies
+      <div>
+        <b>Foundation:</b>
+        <br/>{{company1?.companyName}}
+        <br/>
+        <b>Company partially owned/related:</b>
+        <br/>{{company2?.companyName}}
+      </div>
+      <input class="form-control" style="width:40%" [(ngModel)]="partialOwnership" placeholder="Relationship">
+      <button (click)="savePartialCompanyRelationship()" type="button" class="btn btn-primary">Save relationship that {{company1?.companyName}} has with {{company2?.companyName}}</button>
+    </div>
+  </div>
+  <div style="width:100%;clear:both; display:flex;justify-content:center;">
+    <button style="margin-right:150px;" (click)="clearData()" type="button" class="btn btn-primary">Clear Everything</button>
+  </div>
+</body>
+
+</html>
